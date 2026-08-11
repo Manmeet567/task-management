@@ -4,10 +4,9 @@ import type { ApiResponse } from "../types/api-response.types.js";
 
 const MINUTE_IN_MS = 60 * 1000;
 const HOUR_IN_MS = 60 * MINUTE_IN_MS;
+const FIFTEEN_MINUTES_IN_MS = 15 * 60 * 1000;
 
-function createRateLimitResponse(
-  message: string,
-): ApiResponse<null> {
+function createRateLimitResponse(message: string): ApiResponse<null> {
   return {
     success: false,
     message,
@@ -17,6 +16,18 @@ function createRateLimitResponse(
     },
   };
 }
+
+export const apiRateLimiter = rateLimit({
+  windowMs: FIFTEEN_MINUTES_IN_MS,
+  limit: 100,
+
+  standardHeaders: "draft-8",
+  legacyHeaders: false,
+
+  message: createRateLimitResponse(
+    "Too many requests. Please try again later.",
+  ),
+});
 
 export const loginRateLimiter = rateLimit({
   windowMs: 15 * MINUTE_IN_MS,

@@ -1,4 +1,9 @@
+import { Buffer } from "node:buffer";
 import { z } from "zod";
+
+function isWithinBcryptLimit(password: string): boolean {
+  return Buffer.byteLength(password, "utf8") <= 72;
+}
 
 export const registerSchema = z.strictObject({
   email: z.email({
@@ -12,8 +17,11 @@ export const registerSchema = z.strictObject({
     .min(8, {
       error: "Password must be at least 8 characters",
     })
-    .max(20, {
-      error: "Password must not exceed 20 characters",
+    .max(72, {
+      error: "Password must not exceed 72 characters",
+    })
+    .refine(isWithinBcryptLimit, {
+      error: "Password must not exceed 72 bytes",
     }),
 });
 
@@ -28,6 +36,12 @@ export const loginSchema = z.strictObject({
     })
     .min(1, {
       error: "Password is required",
+    })
+    .max(72, {
+      error: "Password must not exceed 72 characters",
+    })
+    .refine(isWithinBcryptLimit, {
+      error: "Password must not exceed 72 bytes",
     }),
 });
 

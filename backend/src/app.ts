@@ -1,11 +1,11 @@
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
-import { rateLimit } from "express-rate-limit";
 import { getEnv } from "./config/env.js";
 import { errorHandler } from "./middlewares/error.middleware.js";
 import { notFound } from "./middlewares/notFound.middleware.js";
 import { sendSuccess } from "./utils/api-response.js";
+import { apiRateLimiter } from "./middlewares/rate-limit.middleware.js";
 
 const env = getEnv();
 const app = express();
@@ -24,13 +24,7 @@ app.use(
   }),
 );
 
-const apiLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  limit: 100,
-  standardHeaders: "draft-8",
-  legacyHeaders: false,
-});
-app.use("/api", apiLimiter);
+app.use("/api", apiRateLimiter);
 
 app.get("/api/health", (_req, res) => {
   sendSuccess(res, 200, "API is running", null);
