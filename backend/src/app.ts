@@ -3,6 +3,9 @@ import cors from "cors";
 import helmet from "helmet";
 import { rateLimit } from "express-rate-limit";
 import { getEnv } from "./config/env.js";
+import { errorHandler } from "./middlewares/error.middleware.js";
+import { notFound } from "./middlewares/notFound.middleware.js";
+import { sendSuccess } from "./utils/api-response.js";
 
 const env = getEnv();
 const app = express();
@@ -30,10 +33,13 @@ const apiLimiter = rateLimit({
 app.use("/api", apiLimiter);
 
 app.get("/api/health", (_req, res) => {
-  res.status(200).json({
-    status: "success",
-    message: "API is running",
-  });
+  sendSuccess(res, 200, "API is running", null);
 });
+
+import authRouter from "./modules/auth/auth.routes.js";
+app.use("/api/auth", authRouter);
+
+app.use(notFound);
+app.use(errorHandler);
 
 export default app;
