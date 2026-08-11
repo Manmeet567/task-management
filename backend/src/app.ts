@@ -39,6 +39,9 @@ app.get("/api/health", (_req, res) => {
 import authRouter from "./modules/auth/auth.routes.js";
 app.use("/api/auth", authRouter);
 
+import taskRouter from "./modules/tasks/task.routes.js";
+app.use("/api/tasks", taskRouter);
+
 app.use(notFound);
 app.use(errorHandler);
 

@@ -1,19 +1,13 @@
-import type {
-  NextFunction,
-  Request,
-  Response,
-} from "express";
+import type { NextFunction, Request, Response } from "express";
 import type { ZodType } from "zod";
 
 import { AppError } from "../errors/AppError.js";
 
-export function validateBody(schema: ZodType) {
-  return (
-    req: Request,
-    _res: Response,
-    next: NextFunction,
-  ): void => {
-    const result = schema.safeParse(req.body);
+type RequestSource = "body" | "params" | "query";
+
+function validateSource(schema: ZodType, source: RequestSource) {
+  return (req: Request, _res: Response, next: NextFunction): void => {
+    const result = schema.safeParse(req[source]);
 
     if (!result.success) {
       const details = result.error.issues.map((issue) => ({
@@ -21,20 +15,27 @@ export function validateBody(schema: ZodType) {
         message: issue.message,
       }));
 
-      next(
-        new AppError(
-          "Validation failed",
-          400,
-          "VALIDATION_ERROR",
-          details,
-        ),
-      );
+      next(new AppError("Validation failed", 400, "VALIDATION_ERROR", details));
 
       return;
     }
 
-    req.body = result.data;
+    if (source === "body") {
+      req.body = result.data;
+    }
 
     next();
   };
+}
+
+export function validateBody(schema: ZodType) {
+  return validateSource(schema, "body");
+}
+
+export function validateParams(schema: ZodType) {
+  return validateSource(schema, "params");
+}
+
+export function validateQuery(schema: ZodType) {
+  return validateSource(schema, "query");
 }

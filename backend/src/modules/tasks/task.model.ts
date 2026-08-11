@@ -12,7 +12,7 @@ export interface ITask {
   title: string;
   description: string;
   priority: TaskPriority;
-  due_date?: Date;
+  due_date: Date | null;
   status: TaskStatus;
   created_at: Date;
   updated_at: Date;
@@ -49,6 +49,7 @@ const taskSchema = new Schema<ITask>(
 
     due_date: {
       type: Date,
+      default: null,
     },
 
     status: {
