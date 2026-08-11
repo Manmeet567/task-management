@@ -14,6 +14,8 @@ import type {
   UpdateTaskInput,
 } from "./task.validation.js";
 
+import type { TaskDashboardStats } from "./task.repository.js";
+
 interface TaskRecord {
   _id: Types.ObjectId;
   title: string;
@@ -103,6 +105,24 @@ export class TaskService {
     if (!task) {
       throw new AppError("Task not found", 404, "TASK_NOT_FOUND");
     }
+  }
+
+  async getDashboard(userId: string): Promise<TaskDashboardStats> {
+    const stats = await this.tasks.getDashboardByUser(userId);
+
+    return (
+      stats ?? {
+        total_tasks: 0,
+
+        by_status: {
+          to_do: 0,
+          in_progress: 0,
+          done: 0,
+        },
+
+        overdue_tasks: 0,
+      }
+    );
   }
 }
 

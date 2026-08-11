@@ -23,6 +23,8 @@ taskRouter.post("/", validateBody(createTaskSchema), taskController.create);
 
 taskRouter.get("/", validateQuery(taskListQuerySchema), taskController.getAll);
 
+taskRouter.get("/dashboard", taskController.getDashboard);
+
 taskRouter.get(
   "/:task_id",
   validateParams(taskParamsSchema),

@@ -89,6 +89,14 @@ export class TaskController {
 
     sendSuccess(res, 200, "Task deleted successfully", null);
   };
+
+  getDashboard = async (req: Request, res: Response): Promise<void> => {
+    const userId = getAuthenticatedUserId(req);
+
+    const dashboard = await this.service.getDashboard(userId);
+
+    sendSuccess(res, 200, "Dashboard fetched successfully", dashboard);
+  };
 }
 
 export const taskController = new TaskController(taskService);

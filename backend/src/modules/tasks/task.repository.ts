@@ -32,6 +32,18 @@ export interface TaskListOptions {
   sort_order?: "asc" | "desc" | undefined;
 }
 
+export interface TaskDashboardStats {
+  total_tasks: number;
+
+  by_status: {
+    to_do: number;
+    in_progress: number;
+    done: number;
+  };
+
+  overdue_tasks: number;
+}
+
 type TaskEditableFields = Pick<
   ITask,
   "title" | "description" | "priority" | "due_date" | "status"
@@ -39,17 +51,17 @@ type TaskEditableFields = Pick<
 
 export class TaskRepository {
   async create(data: CreateTaskData) {
-  const task = await Task.create({
-    user_id: new Types.ObjectId(data.user_id),
-    title: data.title,
-    description: data.description ?? "",
-    priority: data.priority ?? "medium",
-    due_date: data.due_date ?? null,
-    status: data.status ?? "to_do",
-  });
+    const task = await Task.create({
+      user_id: new Types.ObjectId(data.user_id),
+      title: data.title,
+      description: data.description ?? "",
+      priority: data.priority ?? "medium",
+      due_date: data.due_date ?? null,
+      status: data.status ?? "to_do",
+    });
 
-  return task.toObject();
-}
+    return task.toObject();
+  }
   async findAllByUser(userId: string, options: TaskListOptions = {}) {
     const filter: QueryFilter<ITask> = {
       user_id: new Types.ObjectId(userId),
@@ -137,6 +149,104 @@ export class TaskRepository {
     })
       .lean()
       .exec();
+  }
+
+  async getDashboardByUser(userId: string): Promise<TaskDashboardStats | null> {
+    const now = new Date();
+
+    const [stats] = await Task.aggregate<TaskDashboardStats>([
+      {
+        $match: {
+          user_id: new Types.ObjectId(userId),
+        },
+      },
+
+      {
+        $group: {
+          _id: null,
+
+          total_tasks: {
+            $sum: 1,
+          },
+
+          to_do: {
+            $sum: {
+              $cond: [
+                {
+                  $eq: ["$status", "to_do"],
+                },
+                1,
+                0,
+              ],
+            },
+          },
+
+          in_progress: {
+            $sum: {
+              $cond: [
+                {
+                  $eq: ["$status", "in_progress"],
+                },
+                1,
+                0,
+              ],
+            },
+          },
+
+          done: {
+            $sum: {
+              $cond: [
+                {
+                  $eq: ["$status", "done"],
+                },
+                1,
+                0,
+              ],
+            },
+          },
+
+          overdue_tasks: {
+            $sum: {
+              $cond: [
+                {
+                  $and: [
+                    {
+                      $ne: ["$due_date", null],
+                    },
+                    {
+                      $lt: ["$due_date", now],
+                    },
+                    {
+                      $ne: ["$status", "done"],
+                    },
+                  ],
+                },
+                1,
+                0,
+              ],
+            },
+          },
+        },
+      },
+
+      {
+        $project: {
+          _id: 0,
+
+          total_tasks: 1,
+
+          by_status: {
+            to_do: "$to_do",
+            in_progress: "$in_progress",
+            done: "$done",
+          },
+
+          overdue_tasks: 1,
+        },
+      },
+    ]).exec();
+
+    return stats ?? null;
   }
 }
 
