@@ -1,8 +1,10 @@
 import { Navigate, Route, Routes } from "react-router";
 
+import AppLayout from "./components/layout/AppLayout";
 import LoginPage from "./features/auth/LoginPage";
 import RegisterPage from "./features/auth/RegisterPage";
 import DashboardPage from "./features/dashboard/DashboardPage";
+import TasksPage from "./features/tasks/TasksPage";
 import ProtectedRoute from "./routes/ProtectedRoute";
 
 export default function App() {
@@ -13,13 +15,16 @@ export default function App() {
       <Route path="/register" element={<RegisterPage />} />
 
       <Route
-        path="/"
         element={
           <ProtectedRoute>
-            <DashboardPage />
+            <AppLayout />
           </ProtectedRoute>
         }
-      />
+      >
+        <Route index element={<DashboardPage />} />
+
+        <Route path="tasks" element={<TasksPage />} />
+      </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

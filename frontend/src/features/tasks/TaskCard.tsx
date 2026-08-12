@@ -1,0 +1,105 @@
+import { CalendarDays, Pencil, Trash2 } from "lucide-react";
+
+import TaskBadge from "./TaskBadge";
+import type { Task } from "./task.types";
+
+interface TaskCardProps {
+  task: Task;
+  onEdit: (task: Task) => void;
+  onDelete: (task: Task) => void;
+}
+
+function formatDueDate(dueDate: string | null): string {
+  if (!dueDate) {
+    return "No due date";
+  }
+
+  return new Intl.DateTimeFormat(undefined, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  }).format(new Date(dueDate));
+}
+
+export default function TaskCard({ task, onEdit, onDelete }: TaskCardProps) {
+  return (
+    <article
+      className="
+        flex min-h-[230px] h-full
+        flex-col rounded-2xl
+        border border-border
+        bg-surface p-5 shadow-sm
+        transition
+        hover:-translate-y-0.5
+        hover:shadow-md
+      "
+    >
+      <div className="flex items-start justify-between gap-4">
+        <div className="min-w-0 flex-1">
+          <h2 className="line-clamp-1 font-semibold text-text">{task.title}</h2>
+        </div>
+
+        <div className="flex shrink-0 gap-1">
+          <button
+            type="button"
+            onClick={() => onEdit(task)}
+            className="
+              flex h-9 w-9 cursor-pointer
+              items-center justify-center
+              rounded-lg text-text-muted
+              transition
+              hover:bg-surface-muted
+              hover:text-text
+            "
+            aria-label={`Edit ${task.title}`}
+          >
+            <Pencil size={16} />
+          </button>
+
+          <button
+            type="button"
+            onClick={() => onDelete(task)}
+            className="
+              flex h-9 w-9 cursor-pointer
+              items-center justify-center
+              rounded-lg text-text-muted
+              transition
+              hover:bg-red-50
+              hover:text-red-600
+              dark:hover:bg-red-950/30
+            "
+            aria-label={`Delete ${task.title}`}
+          >
+            <Trash2 size={16} />
+          </button>
+        </div>
+      </div>
+
+      <div className="mt-3 min-h-[3rem]">
+        {task.description ? (
+          <p className="line-clamp-2 text-sm leading-6 text-text-muted">
+            {task.description}
+          </p>
+        ) : (
+          <p className="text-sm italic leading-6 text-text-muted/60">
+            No description
+          </p>
+        )}
+      </div>
+
+      <div className="mt-4 flex flex-wrap items-center gap-2">
+        <TaskBadge type="priority" value={task.priority} />
+
+        <TaskBadge type="status" value={task.status} />
+      </div>
+
+      <div className="mt-auto pt-5">
+        <div className="flex items-center gap-2 border-t border-border pt-4 text-xs text-text-muted">
+          <CalendarDays size={15} />
+
+          {formatDueDate(task.due_date)}
+        </div>
+      </div>
+    </article>
+  );
+}

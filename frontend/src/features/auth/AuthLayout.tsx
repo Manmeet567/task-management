@@ -22,7 +22,7 @@ export default function AuthLayout({
         </div>
 
         <div className="grid w-full overflow-hidden rounded-3xl border border-border bg-surface shadow-xl shadow-indigo-100/20 lg:grid-cols-2 dark:shadow-none">
-          <section className="hidden bg-gradient-to-br from-indigo-100 via-violet-100 to-purple-100 p-12 lg:flex lg:flex-col lg:justify-between dark:from-indigo-950/60 dark:via-violet-950/40 dark:to-purple-950/40">
+          <section className="hidden bg-linear-to-br from-indigo-100 via-violet-100 to-purple-100 p-12 lg:flex lg:flex-col lg:justify-between dark:from-indigo-950/60 dark:via-violet-950/40 dark:to-purple-950/40">
             <div>
               <div className="mb-8 flex h-12 w-12 items-center justify-center rounded-2xl bg-white/70 text-xl font-bold text-indigo-500 shadow-sm dark:bg-white/10 dark:text-indigo-300">
                 T

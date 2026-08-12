@@ -11,10 +11,11 @@ export function login(input: LoginInput): Promise<AuthResponseData> {
 }
 
 export function register(input: RegisterInput): Promise<AuthResponseData> {
-  const { confirm_password: _confirmPassword, ...payload } = input;
-
   return apiRequest<AuthResponseData>("/auth/register", {
     method: "POST",
-    body: payload,
+    body: {
+      email: input.email,
+      password: input.password,
+    },
   });
 }

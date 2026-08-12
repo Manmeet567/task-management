@@ -54,6 +54,10 @@ export async function apiRequest<T>(
 
   const result = (await response.json()) as ApiResponse<T>;
 
+  if (response.status === 401 && authenticated) {
+    useAuthStore.getState().logout();
+  }
+
   if (!response.ok || !result.success) {
     throw new ApiClientError(
       result.message,
