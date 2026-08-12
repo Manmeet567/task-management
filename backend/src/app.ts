@@ -6,6 +6,8 @@ import { errorHandler } from "./middlewares/error.middleware.js";
 import { notFound } from "./middlewares/notFound.middleware.js";
 import { sendSuccess } from "./utils/api-response.js";
 import { apiRateLimiter } from "./middlewares/rate-limit.middleware.js";
+import swaggerUi from "swagger-ui-express";
+import { swaggerDocument } from "./config/swagger.js";
 
 const env = getEnv();
 const app = express();
@@ -35,6 +37,8 @@ app.use("/api/auth", authRouter);
 
 import taskRouter from "./modules/tasks/task.routes.js";
 app.use("/api/tasks", taskRouter);
+
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(notFound);
 app.use(errorHandler);

@@ -1,7 +1,8 @@
 import type { Request, Response } from "express";
 import { sendSuccess } from "../../utils/api-response.js";
 import type { LoginInput, RegisterInput } from "./auth.validation.js";
-import { AuthService, authService } from "./auth.service.js";
+import type { AuthService } from "./auth.service.js";
+import { authService } from "./auth.service.js";
 
 type RegisterRequest = Request<Record<string, never>, unknown, RegisterInput>;
 type LoginRequest = Request<Record<string, never>, unknown, LoginInput>;

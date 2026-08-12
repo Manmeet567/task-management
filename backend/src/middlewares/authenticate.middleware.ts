@@ -33,7 +33,6 @@ export async function authenticate(
 
   try {
     const payload = await verifyAccessToken(token, env.JWT_SECRET);
-    console.log("Payload:", payload); // Log the payload for debugging
 
     if (!payload.sub) {
       throw new Error("Token subject is missing");

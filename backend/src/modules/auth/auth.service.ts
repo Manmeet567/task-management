@@ -8,14 +8,8 @@ import { generateAccessToken } from "../../utils/jwt.js";
 import type { LoginInput, RegisterInput } from "./auth.validation.js";
 
 import type { IUser } from "../users/user.model.js";
-import { UserRepository, userRepository } from "../users/user.repository.js";
-
-interface PublicUser {
-  id: string;
-  email: string;
-  created_at: Date;
-  updated_at: Date;
-}
+import type { UserRepository } from "../users/user.repository.js";
+import { userRepository } from "../users/user.repository.js";
 
 interface AuthResult {
   id: string;
@@ -28,15 +22,6 @@ interface AuthResult {
 interface AuthConfig {
   jwtSecret: string;
   jwtExpiresIn: string;
-}
-
-function toPublicUser(user: HydratedDocument<IUser>): PublicUser {
-  return {
-    id: user._id.toString(),
-    email: user.email,
-    created_at: user.created_at,
-    updated_at: user.updated_at,
-  };
 }
 
 function toAuthResult(

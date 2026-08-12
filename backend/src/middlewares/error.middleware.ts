@@ -18,6 +18,7 @@ function isDuplicateKeyError(error: unknown): error is DuplicateKeyError {
 }
 
 export const errorHandler: ErrorRequestHandler = (error, _req, res, _next) => {
+  void _next;
   if (error instanceof AppError) {
     const response: ApiResponse<null> = {
       success: false,

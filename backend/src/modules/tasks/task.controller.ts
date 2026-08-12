@@ -3,7 +3,8 @@ import type { Request, Response } from "express";
 import { AppError } from "../../errors/AppError.js";
 import { sendSuccess } from "../../utils/api-response.js";
 
-import { TaskService, taskService } from "./task.service.js";
+import type { TaskService } from "./task.service.js";
+import { taskService } from "./task.service.js";
 
 import type {
   CreateTaskInput,

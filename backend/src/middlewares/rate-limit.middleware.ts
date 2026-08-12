@@ -1,4 +1,7 @@
 import { rateLimit } from "express-rate-limit";
+import { getEnv } from "../config/env.js";
+
+const env = getEnv();
 
 import type { ApiResponse } from "../types/api-response.types.js";
 
@@ -23,6 +26,7 @@ export const apiRateLimiter = rateLimit({
 
   standardHeaders: "draft-8",
   legacyHeaders: false,
+  skip: () => env.NODE_ENV === "test",
 
   message: createRateLimitResponse(
     "Too many requests. Please try again later.",
@@ -35,6 +39,7 @@ export const loginRateLimiter = rateLimit({
 
   standardHeaders: "draft-8",
   legacyHeaders: false,
+  skip: () => env.NODE_ENV === "test",
 
   skipSuccessfulRequests: true,
 
@@ -49,6 +54,7 @@ export const registerRateLimiter = rateLimit({
 
   standardHeaders: "draft-8",
   legacyHeaders: false,
+  skip: () => env.NODE_ENV === "test",
 
   message: createRateLimitResponse(
     "Too many registration attempts. Please try again later.",

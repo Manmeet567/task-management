@@ -6,7 +6,7 @@ import type {
 } from "../../constants/task.constants.js";
 import { AppError } from "../../errors/AppError.js";
 
-import { TaskRepository, taskRepository } from "./task.repository.js";
+import { taskRepository } from "./task.repository.js";
 
 import type {
   CreateTaskInput,
@@ -14,7 +14,7 @@ import type {
   UpdateTaskInput,
 } from "./task.validation.js";
 
-import type { TaskDashboardStats } from "./task.repository.js";
+import type { TaskDashboardStats, TaskRepository } from "./task.repository.js";
 
 interface TaskRecord {
   _id: Types.ObjectId;
