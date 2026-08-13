@@ -5,8 +5,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, Navigate, useNavigate } from "react-router";
 
-import { ApiClientError } from "../../api/client";
-import { useAuthStore } from "../../stores/auth.store";
+import { ApiClientError } from "@/api/client";
+import { useAuthStore } from "@/stores/auth.store";
 
 import AuthLayout from "./AuthLayout";
 import { login } from "./auth.api";

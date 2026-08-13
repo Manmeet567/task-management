@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "@daypicker/react/style.css";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -87,4 +88,55 @@ body {
     BlinkMacSystemFont,
     "Segoe UI",
     sans-serif;
+}
+
+.task-calendar {
+  --rdp-accent-color: var(--primary);
+  --rdp-accent-background-color: var(--accent-soft);
+  --rdp-today-color: var(--primary);
+
+  --rdp-day-height: 38px;
+  --rdp-day-width: 38px;
+
+  --rdp-day_button-height: 36px;
+  --rdp-day_button-width: 36px;
+  --rdp-day_button-border-radius: 10px;
+
+  --rdp-nav_button-height: 34px;
+  --rdp-nav_button-width: 34px;
+
+  margin: 0;
+  color: var(--text);
+}
+
+.task-calendar .rdp-weekday {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.task-calendar .rdp-month_caption {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.task-calendar .rdp-day_button:hover {
+  background: var(--surface-muted);
+}
+
+.task-calendar .rdp-selected .rdp-day_button {
+  background: var(--primary);
+  color: white;
+}
+
+.task-calendar .rdp-button_previous,
+.task-calendar .rdp-button_next {
+  border-radius: 10px;
+  color: var(--text-muted);
+}
+
+.task-calendar .rdp-button_previous:hover,
+.task-calendar .rdp-button_next:hover {
+  background: var(--surface-muted);
+  color: var(--text);
 }

@@ -2,12 +2,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { useEffect } from "react";
 
-import Modal from "../../components/ui/Modal";
-import Select, { type SelectOption } from "../../components/ui/Select";
-
-import { taskFormSchema, type TaskFormInput } from "./task.schema";
-
-import type { Task, TaskPriority, TaskStatus } from "./task.types";
+import Modal from "@/components/ui/Modal";
+import Select, { type SelectOption } from "@/components/ui/Select";
+import { taskFormSchema, type TaskFormInput } from "../../task.schema";
+import type { Task, TaskPriority, TaskStatus } from "../../task.types";
+import DatePicker from "@/components/ui/DatePicker";
 
 const priorityOptions: SelectOption<TaskPriority>[] = [
   {
@@ -241,21 +240,16 @@ export default function TaskFormModal({
             Due date
           </label>
 
-          <input
-            id="task-due-date"
-            type="date"
-            {...register("due_date")}
-            className="
-              w-full rounded-xl
-              border border-border
-              bg-background px-4 py-3
-              text-sm text-text
-              outline-none transition
-              focus:border-primary
-              focus:ring-4
-              focus:ring-indigo-100
-              dark:focus:ring-indigo-950
-            "
+          <Controller
+            name="due_date"
+            control={control}
+            render={({ field }) => (
+              <DatePicker
+                value={field.value}
+                onChange={field.onChange}
+                placeholder="Select due date"
+              />
+            )}
           />
 
           {errors.due_date && (

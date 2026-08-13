@@ -39,3 +39,5 @@ export interface UpdateTaskInput {
   due_date?: string | null;
   status?: TaskStatus;
 }
+
+export type TaskViewMode = "list" | "board";

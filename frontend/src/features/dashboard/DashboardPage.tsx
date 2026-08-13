@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router";
 
-import { ApiClientError } from "../../api/client";
+import { ApiClientError } from "@/api/client";
 import { getDashboard } from "./dashboard.api";
 
 interface StatCardProps {

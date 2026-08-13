@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { CheckCircle2 } from "lucide-react";
 
-import ThemeToggle from "../../components/ui/ThemeToggle";
+import ThemeToggle from "@/components/ui/ThemeToggle";
 
 interface AuthLayoutProps {
   title: string;

@@ -140,14 +140,14 @@ JWT_SECRET=replace-with-a-long-random-secret-at-least-32-characters
 JWT_EXPIRES_IN=1h
 ```
 
-| Variable | Description |
-|---|---|
-| `NODE_ENV` | `development`, `test`, or `production` |
-| `PORT` | HTTP server port |
-| `MONGODB_URI` | MongoDB connection string |
-| `CLIENT_ORIGIN` | Frontend origin allowed by CORS |
-| `JWT_SECRET` | Secret used to sign and verify JWT access tokens |
-| `JWT_EXPIRES_IN` | JWT lifetime, e.g. `1h` |
+| Variable         | Description                                      |
+| ---------------- | ------------------------------------------------ |
+| `NODE_ENV`       | `development`, `test`, or `production`           |
+| `PORT`           | HTTP server port                                 |
+| `MONGODB_URI`    | MongoDB connection string                        |
+| `CLIENT_ORIGIN`  | Frontend origin allowed by CORS                  |
+| `JWT_SECRET`     | Secret used to sign and verify JWT access tokens |
+| `JWT_EXPIRES_IN` | JWT lifetime, e.g. `1h`                          |
 
 The project uses Node's native `--env-file` support instead of the `dotenv` package.
 
@@ -218,10 +218,10 @@ The token is returned by successful registration and login.
 
 ### Auth Endpoints
 
-| Method | Endpoint | Description |
-|---|---|---|
-| `POST` | `/api/auth/register` | Register a new user |
-| `POST` | `/api/auth/login` | Login and receive an access token |
+| Method | Endpoint             | Description                       |
+| ------ | -------------------- | --------------------------------- |
+| `POST` | `/api/auth/register` | Register a new user               |
+| `POST` | `/api/auth/login`    | Login and receive an access token |
 
 Example body:
 
@@ -236,14 +236,14 @@ Example body:
 
 All Task endpoints require authentication.
 
-| Method | Endpoint | Description |
-|---|---|---|
-| `POST` | `/api/tasks` | Create a task |
-| `GET` | `/api/tasks` | Get the authenticated user's tasks |
-| `GET` | `/api/tasks/:task_id` | Get one owned task |
-| `PATCH` | `/api/tasks/:task_id` | Partially update an owned task |
-| `DELETE` | `/api/tasks/:task_id` | Delete an owned task |
-| `GET` | `/api/tasks/dashboard` | Get dashboard statistics |
+| Method   | Endpoint               | Description                        |
+| -------- | ---------------------- | ---------------------------------- |
+| `POST`   | `/api/tasks`           | Create a task                      |
+| `GET`    | `/api/tasks`           | Get the authenticated user's tasks |
+| `GET`    | `/api/tasks/:task_id`  | Get one owned task                 |
+| `PATCH`  | `/api/tasks/:task_id`  | Partially update an owned task     |
+| `DELETE` | `/api/tasks/:task_id`  | Delete an owned task               |
+| `GET`    | `/api/tasks/dashboard` | Get dashboard statistics           |
 
 ### Create Task Example
 

@@ -1,8 +1,7 @@
 import { CalendarDays, Pencil, Trash2 } from "lucide-react";
-
-import TaskBadge from "./TaskBadge";
-import type { Task } from "./task.types";
-import { isTaskOverdue } from "./task.utils";
+import TaskBadge from "../shared/TaskBadge";
+import type { Task } from "../../task.types";
+import { isTaskOverdue } from "../../task.utils";
 
 interface TaskCardProps {
   task: Task;
@@ -35,7 +34,7 @@ export default function TaskCard({
     <article
       onClick={() => onView(task)}
       className="
-        flex min-h-[230px] h-full
+        flex min-h-57.5 h-full
         cursor-pointer flex-col
         rounded-2xl
         border border-border
@@ -94,7 +93,7 @@ export default function TaskCard({
         </div>
       </div>
 
-      <div className="mt-3 min-h-[3rem]">
+      <div className="mt-3 min-h-12">
         {task.description ? (
           <p className="line-clamp-2 text-sm leading-6 text-text-muted">
             {task.description}

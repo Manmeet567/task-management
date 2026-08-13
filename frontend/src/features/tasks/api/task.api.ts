@@ -1,11 +1,11 @@
-import { apiRequest } from "../../api/client";
+import { apiRequest } from "../../../api/client";
 
 import type {
   CreateTaskInput,
   Task,
   TaskFilters,
   UpdateTaskInput,
-} from "./task.types";
+} from "../task.types";
 
 export function getTasks(filters: TaskFilters): Promise<Task[]> {
   const params = new URLSearchParams();

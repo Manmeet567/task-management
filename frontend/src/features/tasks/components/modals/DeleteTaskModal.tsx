@@ -1,7 +1,7 @@
 import { AlertTriangle } from "lucide-react";
 
-import Modal from "../../components/ui/Modal";
-import type { Task } from "./task.types";
+import Modal from "@/components/ui/Modal";
+import type { Task } from "../../task.types";
 
 interface DeleteTaskModalProps {
   task: Task | null;

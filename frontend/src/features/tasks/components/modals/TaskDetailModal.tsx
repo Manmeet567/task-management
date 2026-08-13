@@ -1,8 +1,8 @@
 import { CalendarDays, Clock3, Pencil, Trash2 } from "lucide-react";
 
-import Modal from "../../components/ui/Modal";
-import TaskBadge from "./TaskBadge";
-import type { Task } from "./task.types";
+import Modal from "@/components/ui/Modal";
+import TaskBadge from "../shared/TaskBadge";
+import type { Task } from "../../task.types";
 
 interface TaskDetailModalProps {
   task: Task | null;

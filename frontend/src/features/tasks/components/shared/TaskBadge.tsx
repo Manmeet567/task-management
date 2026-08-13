@@ -1,4 +1,4 @@
-import type { TaskPriority, TaskStatus } from "./task.types";
+import type { TaskPriority, TaskStatus } from "../../task.types";
 
 type BadgeType =
   | {
