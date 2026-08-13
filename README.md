@@ -148,7 +148,7 @@ task-management/
 
 ## Screenshots
 
-Store screenshots in:
+Screenshots in:
 
 ```text
 docs/screenshots/
