@@ -495,125 +495,124 @@ export default function TasksPage() {
         </div>
 
         {/* Filters Body */}
-        <div
-          className={[
-            "border-t border-border p-4 sm:block sm:border-t-0",
-            mobileFiltersOpen ? "block" : "hidden",
-          ].join(" ")}
-        >
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {/* Status */}
-            <Select
-              value={filters.status ?? ""}
-              options={statusOptions}
-              placeholder="All statuses"
-              onChange={(value) =>
-                setFilters((current) => ({
-                  ...current,
-                  status: value || undefined,
-                }))
-              }
-            />
-
-            {/* Priority */}
-            <Select
-              value={filters.priority ?? ""}
-              options={priorityOptions}
-              placeholder="All priorities"
-              onChange={(value) =>
-                setFilters((current) => ({
-                  ...current,
-                  priority: value || undefined,
-                }))
-              }
-            />
-
-            {/* Sort By */}
-            <Select
-              value={filters.sort_by ?? "created_at"}
-              options={sortByOptions}
-              placeholder="Sort by"
-              onChange={(value) => {
-                if (!value) {
-                  return;
-                }
-
-                setFilters((current) => ({
-                  ...current,
-                  sort_by: value,
-                }));
-              }}
-            />
-
-            {/* Sort Order */}
-            <Select
-              value={filters.sort_order ?? "desc"}
-              options={sortOrderOptions}
-              placeholder="Sort order"
-              onChange={(value) => {
-                if (!value) {
-                  return;
-                }
-
-                setFilters((current) => ({
-                  ...current,
-                  sort_order: value,
-                }));
-              }}
-            />
-          </div>
-
-          {/* Active Filter Chips */}
-          {activeFilterCount > 0 && (
-            <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-border pt-4">
-              <span className="mr-1 text-xs font-medium text-text-muted">
-                Active:
-              </span>
-
-              {filters.status && (
-                <button
-                  type="button"
-                  onClick={removeStatusFilter}
-                  className="inline-flex cursor-pointer items-center gap-1.5 rounded-full bg-accent-soft px-3 py-1.5 text-xs font-medium text-indigo-700 transition hover:bg-indigo-100 dark:text-indigo-200 dark:hover:bg-indigo-900/50"
-                >
-                  Status:{" "}
-                  {
-                    statusOptions.find(
-                      (option) => option.value === filters.status,
-                    )?.label
+        <div className="motion-mobile-collapse" data-open={mobileFiltersOpen}>
+          <div className="motion-mobile-collapse-inner">
+            <div className="border-t border-border p-4 sm:border-t-0">
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                {/* Status */}
+                <Select
+                  value={filters.status ?? ""}
+                  options={statusOptions}
+                  placeholder="All statuses"
+                  onChange={(value) =>
+                    setFilters((current) => ({
+                      ...current,
+                      status: value || undefined,
+                    }))
                   }
-                  <X size={13} />
-                </button>
+                />
+
+                {/* Priority */}
+                <Select
+                  value={filters.priority ?? ""}
+                  options={priorityOptions}
+                  placeholder="All priorities"
+                  onChange={(value) =>
+                    setFilters((current) => ({
+                      ...current,
+                      priority: value || undefined,
+                    }))
+                  }
+                />
+
+                {/* Sort By */}
+                <Select
+                  value={filters.sort_by ?? "created_at"}
+                  options={sortByOptions}
+                  placeholder="Sort by"
+                  onChange={(value) => {
+                    if (!value) {
+                      return;
+                    }
+
+                    setFilters((current) => ({
+                      ...current,
+                      sort_by: value,
+                    }));
+                  }}
+                />
+
+                {/* Sort Order */}
+                <Select
+                  value={filters.sort_order ?? "desc"}
+                  options={sortOrderOptions}
+                  placeholder="Sort order"
+                  onChange={(value) => {
+                    if (!value) {
+                      return;
+                    }
+
+                    setFilters((current) => ({
+                      ...current,
+                      sort_order: value,
+                    }));
+                  }}
+                />
+              </div>
+
+              {/* Active Filter Chips */}
+              {activeFilterCount > 0 && (
+                <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-border pt-4">
+                  <span className="mr-1 text-xs font-medium text-text-muted">
+                    Active:
+                  </span>
+
+                  {filters.status && (
+                    <button
+                      type="button"
+                      onClick={removeStatusFilter}
+                      className="inline-flex cursor-pointer items-center gap-1.5 rounded-full bg-accent-soft px-3 py-1.5 text-xs font-medium text-indigo-700 transition hover:bg-indigo-100 dark:text-indigo-200 dark:hover:bg-indigo-900/50"
+                    >
+                      Status:{" "}
+                      {
+                        statusOptions.find(
+                          (option) => option.value === filters.status,
+                        )?.label
+                      }
+                      <X size={13} />
+                    </button>
+                  )}
+
+                  {filters.priority && (
+                    <button
+                      type="button"
+                      onClick={removePriorityFilter}
+                      className="inline-flex cursor-pointer items-center gap-1.5 rounded-full bg-accent-soft px-3 py-1.5 text-xs font-medium text-indigo-700 transition hover:bg-indigo-100 dark:text-indigo-200 dark:hover:bg-indigo-900/50"
+                    >
+                      Priority:{" "}
+                      {
+                        priorityOptions.find(
+                          (option) => option.value === filters.priority,
+                        )?.label
+                      }
+                      <X size={13} />
+                    </button>
+                  )}
+                </div>
               )}
 
-              {filters.priority && (
+              {/* Mobile Reset */}
+              <div className="mt-4 flex justify-end sm:hidden">
                 <button
                   type="button"
-                  onClick={removePriorityFilter}
-                  className="inline-flex cursor-pointer items-center gap-1.5 rounded-full bg-accent-soft px-3 py-1.5 text-xs font-medium text-indigo-700 transition hover:bg-indigo-100 dark:text-indigo-200 dark:hover:bg-indigo-900/50"
+                  onClick={resetFilters}
+                  className="inline-flex cursor-pointer items-center gap-2 text-xs font-medium text-text-muted transition hover:text-text"
                 >
-                  Priority:{" "}
-                  {
-                    priorityOptions.find(
-                      (option) => option.value === filters.priority,
-                    )?.label
-                  }
-                  <X size={13} />
+                  <RotateCcw size={14} />
+                  Reset all
                 </button>
-              )}
+              </div>
             </div>
-          )}
-
-          {/* Mobile Reset */}
-          <div className="mt-4 flex justify-end sm:hidden">
-            <button
-              type="button"
-              onClick={resetFilters}
-              className="inline-flex cursor-pointer items-center gap-2 text-xs font-medium text-text-muted transition hover:text-text"
-            >
-              <RotateCcw size={14} />
-              Reset all
-            </button>
           </div>
         </div>
       </div>

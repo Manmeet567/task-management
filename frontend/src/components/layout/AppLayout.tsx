@@ -126,6 +126,7 @@ export default function AppLayout() {
             onClick={() => setMobileMenuOpen(true)}
             className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-xl border border-border bg-surface text-text-muted lg:hidden"
             aria-label="Open navigation"
+            aria-expanded={mobileMenuOpen}
           >
             <Menu size={20} />
           </button>
@@ -138,29 +139,42 @@ export default function AppLayout() {
         <ThemeToggle />
       </header>
 
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden">
+      <div
+        className={[
+          "fixed inset-0 z-50 lg:hidden",
+          mobileMenuOpen ? "pointer-events-auto" : "pointer-events-none",
+        ].join(" ")}
+        aria-hidden={!mobileMenuOpen}
+        inert={!mobileMenuOpen}
+      >
+        <button
+          type="button"
+          aria-label="Close navigation"
+          className={[
+            "motion-sidebar-overlay absolute inset-0 bg-black/30 backdrop-blur-[1px]",
+            mobileMenuOpen ? "opacity-100" : "opacity-0",
+          ].join(" ")}
+          onClick={() => setMobileMenuOpen(false)}
+        />
+
+        <aside
+          className={[
+            "motion-sidebar-panel relative h-full w-72 max-w-[85vw] border-r border-border bg-surface shadow-2xl",
+            mobileMenuOpen ? "translate-x-0" : "-translate-x-full",
+          ].join(" ")}
+        >
           <button
             type="button"
-            aria-label="Close navigation"
-            className="absolute inset-0 bg-black/30 backdrop-blur-[1px]"
             onClick={() => setMobileMenuOpen(false)}
-          />
+            className="absolute right-4 top-5 flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg text-text-muted transition hover:bg-surface-muted"
+            aria-label="Close navigation"
+          >
+            <X size={19} />
+          </button>
 
-          <aside className="relative h-full w-72 max-w-[85vw] border-r border-border bg-surface shadow-2xl">
-            <button
-              type="button"
-              onClick={() => setMobileMenuOpen(false)}
-              className="absolute right-4 top-5 flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg text-text-muted hover:bg-surface-muted"
-              aria-label="Close navigation"
-            >
-              <X size={19} />
-            </button>
-
-            <SidebarContent onNavigate={() => setMobileMenuOpen(false)} />
-          </aside>
-        </div>
-      )}
+          <SidebarContent onNavigate={() => setMobileMenuOpen(false)} />
+        </aside>
+      </div>
 
       <main className="lg:ml-64">
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">

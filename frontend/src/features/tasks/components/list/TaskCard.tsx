@@ -39,7 +39,8 @@ export default function TaskCard({
         rounded-2xl
         border border-border
         bg-surface p-5 shadow-sm
-        transition
+        transition-[transform,box-shadow,border-color]
+        duration-200 ease-out
         hover:-translate-y-0.5
         hover:border-indigo-200
         hover:shadow-md

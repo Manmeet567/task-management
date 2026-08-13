@@ -50,7 +50,9 @@ export default function KanbanCard({ task, onView }: KanbanCardProps) {
           cursor-pointer rounded-2xl
           border border-border
           bg-surface p-4 shadow-sm
-          outline-none transition
+          outline-none
+          transition-[border-color,box-shadow,opacity]
+          duration-200 ease-out
           hover:border-indigo-200
           hover:shadow-md
           focus-visible:ring-4

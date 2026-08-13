@@ -1,4 +1,5 @@
 import { AlertTriangle } from "lucide-react";
+import { useState } from "react";
 
 import Modal from "@/components/ui/Modal";
 import type { Task } from "../../task.types";
@@ -16,6 +17,12 @@ export default function DeleteTaskModal({
   onClose,
   onConfirm,
 }: DeleteTaskModalProps) {
+  const [displayTask, setDisplayTask] = useState(task);
+
+  if (task && task !== displayTask) {
+    setDisplayTask(task);
+  }
+
   return (
     <Modal
       isOpen={Boolean(task)}
@@ -30,8 +37,8 @@ export default function DeleteTaskModal({
 
         <p className="mt-5 text-sm leading-6 text-text-muted">
           Are you sure you want to delete{" "}
-          <span className="font-semibold text-text">{task?.title}</span>? This
-          action cannot be undone.
+          <span className="font-semibold text-text">{displayTask?.title}</span>?
+          This action cannot be undone.
         </p>
 
         <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">

@@ -79,7 +79,7 @@ export default function Select<T extends string>({
         <ChevronDown
           size={16}
           className={[
-            "shrink-0 text-text-muted transition-transform",
+            "shrink-0 text-text-muted transition-transform duration-200 ease-out",
             isOpen ? "rotate-180" : "",
           ].join(" ")}
         />
@@ -92,7 +92,7 @@ export default function Select<T extends string>({
             absolute left-0 right-0
             top-[calc(100%+0.4rem)] z-40
             max-h-64 overflow-y-auto
-            rounded-xl border border-border
+            motion-popover-in rounded-xl border border-border
             bg-surface p-1.5
             shadow-xl
             shadow-slate-200/40

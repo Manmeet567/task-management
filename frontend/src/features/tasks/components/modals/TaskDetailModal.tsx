@@ -1,4 +1,5 @@
 import { CalendarDays, Clock3, Pencil, Trash2 } from "lucide-react";
+import { useState } from "react";
 
 import Modal from "@/components/ui/Modal";
 import TaskBadge from "../shared/TaskBadge";
@@ -39,18 +40,24 @@ export default function TaskDetailModal({
   onEdit,
   onDelete,
 }: TaskDetailModalProps) {
+  const [displayTask, setDisplayTask] = useState(task);
+
+  if (task && task !== displayTask) {
+    setDisplayTask(task);
+  }
+
   return (
     <Modal isOpen={Boolean(task)} title="Task details" onClose={onClose}>
-      {task && (
+      {displayTask && (
         <div className="p-6">
           <div className="flex flex-wrap gap-2">
-            <TaskBadge type="priority" value={task.priority} />
+            <TaskBadge type="priority" value={displayTask.priority} />
 
-            <TaskBadge type="status" value={task.status} />
+            <TaskBadge type="status" value={displayTask.status} />
           </div>
 
           <h3 className="mt-5 text-2xl font-semibold tracking-tight text-text">
-            {task.title}
+            {displayTask.title}
           </h3>
 
           <div className="mt-5">
@@ -58,9 +65,9 @@ export default function TaskDetailModal({
               Description
             </p>
 
-            {task.description ? (
+            {displayTask.description ? (
               <p className="whitespace-pre-wrap text-sm leading-7 text-text-muted">
-                {task.description}
+                {displayTask.description}
               </p>
             ) : (
               <p className="text-sm italic text-text-muted/60">
@@ -77,7 +84,7 @@ export default function TaskDetailModal({
                 <p className="text-xs text-text-muted">Due date</p>
 
                 <p className="mt-1 text-sm font-medium">
-                  {formatDate(task.due_date)}
+                  {formatDate(displayTask.due_date)}
                 </p>
               </div>
             </div>
@@ -89,7 +96,7 @@ export default function TaskDetailModal({
                 <p className="text-xs text-text-muted">Created</p>
 
                 <p className="mt-1 text-sm font-medium">
-                  {formatDateTime(task.created_at)}
+                  {formatDateTime(displayTask.created_at)}
                 </p>
               </div>
             </div>
@@ -100,7 +107,7 @@ export default function TaskDetailModal({
               type="button"
               onClick={() => {
                 onClose();
-                onDelete(task);
+                onDelete(displayTask);
               }}
               className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-red-200 px-4 py-2.5 text-sm font-medium text-red-600 transition hover:bg-red-50 dark:border-red-900/60 dark:text-red-300 dark:hover:bg-red-950/30"
             >
@@ -112,7 +119,7 @@ export default function TaskDetailModal({
               type="button"
               onClick={() => {
                 onClose();
-                onEdit(task);
+                onEdit(displayTask);
               }}
               className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-primary-hover"
             >

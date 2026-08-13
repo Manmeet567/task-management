@@ -155,7 +155,7 @@ export default function DatePicker({
           className="
             absolute bottom-[calc(100%+0.5rem)]
             left-0 z-50
-            rounded-2xl border border-border
+            motion-popover-in rounded-2xl border border-border
             bg-surface p-3
             shadow-2xl
           "

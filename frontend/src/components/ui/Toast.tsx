@@ -33,7 +33,7 @@ export default function Toast() {
       role="status"
       className="
         fixed bottom-5 right-5
-        z-200 flex max-w-sm
+        motion-toast-in z-200 flex max-w-sm
         items-center gap-3
         rounded-2xl border border-border
         bg-surface px-4 py-3
