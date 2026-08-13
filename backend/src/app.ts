@@ -46,6 +46,14 @@ app.use("/api/tasks", taskRouter);
 
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+app.get("/api/debug/ip", (req, res) => {
+  res.json({
+    ip: req.ip,
+    ips: req.ips,
+    forwardedFor: req.get("x-forwarded-for") ?? null,
+  });
+});
+
 app.use(notFound);
 app.use(errorHandler);
 
