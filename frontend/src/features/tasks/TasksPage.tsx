@@ -15,8 +15,9 @@ import type {
 } from "./task.types";
 import TaskFormModal from "./TaskFormModal";
 import DeleteTaskModal from "./DeleteTaskModal";
-
+import TaskDetailModal from "./TaskDetailModal";
 import { createTask, deleteTask, getTasks, updateTask } from "./task.api";
+import { useToastStore } from "../../stores/toast.store";
 
 const defaultFilters: TaskFilters = {
   sort_by: "created_at",
@@ -78,12 +79,10 @@ const sortOrderOptions: SelectOption<TaskSortOrder>[] = [
 export default function TasksPage() {
   const [filters, setFilters] = useState<TaskFilters>(defaultFilters);
   const queryClient = useQueryClient();
-
   const [taskFormOpen, setTaskFormOpen] = useState(false);
-
   const [editingTask, setEditingTask] = useState<Task | null>(null);
-
   const [deletingTask, setDeletingTask] = useState<Task | null>(null);
+  const [viewingTask, setViewingTask] = useState<Task | null>(null);
 
   const {
     data: tasks,
@@ -137,6 +136,8 @@ export default function TasksPage() {
     onSuccess: async () => {
       setTaskFormOpen(false);
 
+      showToast("Task created successfully");
+
       await refreshTaskData();
     },
   });
@@ -155,6 +156,8 @@ export default function TasksPage() {
       setEditingTask(null);
       setTaskFormOpen(false);
 
+      showToast("Task updated successfully");
+
       await refreshTaskData();
     },
   });
@@ -164,6 +167,8 @@ export default function TasksPage() {
 
     onSuccess: async () => {
       setDeletingTask(null);
+
+      showToast("Task deleted successfully");
 
       await refreshTaskData();
     },
@@ -190,6 +195,8 @@ export default function TasksPage() {
       due_date: data.due_date || null,
     });
   };
+
+  const showToast = useToastStore((state) => state.showToast);
 
   return (
     <section>
@@ -410,14 +417,12 @@ export default function TasksPage() {
             <TaskCard
               key={task.id}
               task={task}
+              onView={setViewingTask}
               onEdit={(taskToEdit) => {
                 setEditingTask(taskToEdit);
-
                 setTaskFormOpen(true);
               }}
-              onDelete={(taskToDelete) => {
-                setDeletingTask(taskToDelete);
-              }}
+              onDelete={setDeletingTask}
             />
           ))}
         </div>
@@ -448,6 +453,18 @@ export default function TasksPage() {
           setEditingTask(null);
         }}
         onSubmit={handleTaskSubmit}
+      />
+
+      <TaskDetailModal
+        task={viewingTask}
+        onClose={() => setViewingTask(null)}
+        onEdit={(taskToEdit) => {
+          setEditingTask(taskToEdit);
+          setTaskFormOpen(true);
+        }}
+        onDelete={(taskToDelete) => {
+          setDeletingTask(taskToDelete);
+        }}
       />
 
       <DeleteTaskModal

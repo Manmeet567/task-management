@@ -2,9 +2,11 @@ import { CalendarDays, Pencil, Trash2 } from "lucide-react";
 
 import TaskBadge from "./TaskBadge";
 import type { Task } from "./task.types";
+import { isTaskOverdue } from "./task.utils";
 
 interface TaskCardProps {
   task: Task;
+  onView: (task: Task) => void;
   onEdit: (task: Task) => void;
   onDelete: (task: Task) => void;
 }
@@ -21,17 +23,28 @@ function formatDueDate(dueDate: string | null): string {
   }).format(new Date(dueDate));
 }
 
-export default function TaskCard({ task, onEdit, onDelete }: TaskCardProps) {
+export default function TaskCard({
+  task,
+  onEdit,
+  onView,
+  onDelete,
+}: TaskCardProps) {
+  const overdue = isTaskOverdue(task);
+
   return (
     <article
+      onClick={() => onView(task)}
       className="
         flex min-h-[230px] h-full
-        flex-col rounded-2xl
+        cursor-pointer flex-col
+        rounded-2xl
         border border-border
         bg-surface p-5 shadow-sm
         transition
         hover:-translate-y-0.5
+        hover:border-indigo-200
         hover:shadow-md
+        dark:hover:border-indigo-900
       "
     >
       <div className="flex items-start justify-between gap-4">
@@ -42,7 +55,10 @@ export default function TaskCard({ task, onEdit, onDelete }: TaskCardProps) {
         <div className="flex shrink-0 gap-1">
           <button
             type="button"
-            onClick={() => onEdit(task)}
+            onClick={(event) => {
+              event.stopPropagation();
+              onEdit(task);
+            }}
             className="
               flex h-9 w-9 cursor-pointer
               items-center justify-center
@@ -58,7 +74,10 @@ export default function TaskCard({ task, onEdit, onDelete }: TaskCardProps) {
 
           <button
             type="button"
-            onClick={() => onDelete(task)}
+            onClick={(event) => {
+              event.stopPropagation();
+              onDelete(task);
+            }}
             className="
               flex h-9 w-9 cursor-pointer
               items-center justify-center
@@ -93,12 +112,23 @@ export default function TaskCard({ task, onEdit, onDelete }: TaskCardProps) {
         <TaskBadge type="status" value={task.status} />
       </div>
 
-      <div className="mt-auto pt-5">
-        <div className="flex items-center gap-2 border-t border-border pt-4 text-xs text-text-muted">
-          <CalendarDays size={15} />
+      <div
+        className={[
+          "flex items-center gap-2 border-t border-border pt-4 text-xs",
+          overdue
+            ? "font-medium text-red-500 dark:text-red-300"
+            : "text-text-muted",
+        ].join(" ")}
+      >
+        <CalendarDays size={15} />
 
-          {formatDueDate(task.due_date)}
-        </div>
+        {formatDueDate(task.due_date)}
+
+        {overdue && (
+          <span className="ml-auto rounded-full bg-red-50 px-2 py-1 text-[11px] font-semibold text-red-600 dark:bg-red-950/30 dark:text-red-300">
+            Overdue
+          </span>
+        )}
       </div>
     </article>
   );
