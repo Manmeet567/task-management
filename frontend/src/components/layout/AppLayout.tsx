@@ -1,7 +1,7 @@
-import { LayoutDashboard, ListTodo, LogOut, Menu, X } from "lucide-react";
-import { useState } from "react";
-import { NavLink, Outlet, useNavigate } from "react-router";
 import { useQueryClient } from "@tanstack/react-query";
+import { LayoutDashboard, ListTodo, LogOut, Menu, X } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { NavLink, Outlet, useNavigate } from "react-router";
 
 import { useAuthStore } from "../../stores/auth.store";
 import ThemeToggle from "../ui/ThemeToggle";
@@ -36,6 +36,8 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   const logout = useAuthStore((state) => state.logout);
 
   const handleLogout = () => {
+    onNavigate?.();
+
     logout();
 
     queryClient.clear();
@@ -113,20 +115,102 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
 export default function AppLayout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  const mobileMenuButtonRef = useRef<HTMLButtonElement | null>(null);
+
+  const mobileMenuCloseButtonRef = useRef<HTMLButtonElement | null>(null);
+
+  const openMobileMenu = useCallback(() => {
+    setMobileMenuOpen(true);
+  }, []);
+
+  const closeMobileMenu = useCallback(() => {
+    /*
+     * Move focus OUT of the sidebar before
+     * setting it to inert.
+     *
+     * This prevents the accessibility warning
+     * caused by hiding/disabling focused content.
+     */
+    mobileMenuButtonRef.current?.focus();
+
+    setMobileMenuOpen(false);
+  }, []);
+
+  /*
+   * When the mobile navigation opens,
+   * move keyboard focus into the drawer.
+   */
+  useEffect(() => {
+    if (!mobileMenuOpen) {
+      return;
+    }
+
+    const frame = window.requestAnimationFrame(() => {
+      mobileMenuCloseButtonRef.current?.focus();
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+    };
+  }, [mobileMenuOpen]);
+
+  /*
+   * Escape closes the mobile navigation.
+   */
+  useEffect(() => {
+    if (!mobileMenuOpen) {
+      return;
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        closeMobileMenu();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [mobileMenuOpen, closeMobileMenu]);
+
+  /*
+   * Prevent the page behind the mobile
+   * navigation from scrolling.
+   */
+  useEffect(() => {
+    if (!mobileMenuOpen) {
+      return;
+    }
+
+    const previousOverflow = document.body.style.overflow;
+
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [mobileMenuOpen]);
+
   return (
     <div className="min-h-screen bg-background text-text">
+      {/* Desktop Sidebar */}
       <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 border-r border-border bg-surface lg:block">
         <SidebarContent />
       </aside>
 
+      {/* Header */}
       <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-border bg-background/90 px-4 backdrop-blur lg:ml-64 lg:px-8">
         <div className="flex items-center gap-3">
           <button
+            ref={mobileMenuButtonRef}
             type="button"
-            onClick={() => setMobileMenuOpen(true)}
+            onClick={openMobileMenu}
             className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-xl border border-border bg-surface text-text-muted lg:hidden"
             aria-label="Open navigation"
             aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-navigation"
           >
             <Menu size={20} />
           </button>
@@ -139,43 +223,54 @@ export default function AppLayout() {
         <ThemeToggle />
       </header>
 
+      {/* Mobile Navigation */}
       <div
         className={[
           "fixed inset-0 z-50 lg:hidden",
           mobileMenuOpen ? "pointer-events-auto" : "pointer-events-none",
         ].join(" ")}
-        aria-hidden={!mobileMenuOpen}
         inert={!mobileMenuOpen}
       >
-        <button
-          type="button"
-          aria-label="Close navigation"
+        {/* Backdrop */}
+        <div
+          aria-hidden="true"
+          data-state={mobileMenuOpen ? "open" : "closed"}
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) {
+              closeMobileMenu();
+            }
+          }}
           className={[
             "motion-sidebar-overlay absolute inset-0 bg-black/30 backdrop-blur-[1px]",
             mobileMenuOpen ? "opacity-100" : "opacity-0",
           ].join(" ")}
-          onClick={() => setMobileMenuOpen(false)}
         />
 
+        {/* Drawer */}
         <aside
+          id="mobile-navigation"
+          aria-label="Mobile navigation"
+          data-state={mobileMenuOpen ? "open" : "closed"}
           className={[
             "motion-sidebar-panel relative h-full w-72 max-w-[85vw] border-r border-border bg-surface shadow-2xl",
             mobileMenuOpen ? "translate-x-0" : "-translate-x-full",
           ].join(" ")}
         >
           <button
+            ref={mobileMenuCloseButtonRef}
             type="button"
-            onClick={() => setMobileMenuOpen(false)}
+            onClick={closeMobileMenu}
             className="absolute right-4 top-5 flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg text-text-muted transition hover:bg-surface-muted"
             aria-label="Close navigation"
           >
             <X size={19} />
           </button>
 
-          <SidebarContent onNavigate={() => setMobileMenuOpen(false)} />
+          <SidebarContent onNavigate={closeMobileMenu} />
         </aside>
       </div>
 
+      {/* Page Content */}
       <main className="lg:ml-64">
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
           <Outlet />
