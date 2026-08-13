@@ -8,10 +8,16 @@ import { sendSuccess } from "./utils/api-response.js";
 import { apiRateLimiter } from "./middlewares/rate-limit.middleware.js";
 import swaggerUi from "swagger-ui-express";
 import { swaggerDocument } from "./config/swagger.js";
+import { requestLogger } from "./middlewares/logger.middleware.js";
 
 const env = getEnv();
 const app = express();
 
+if (env.TRUST_PROXY_HOPS > 0) {
+  app.set("trust proxy", env.TRUST_PROXY_HOPS);
+}
+
+app.use(requestLogger);
 app.use(helmet());
 
 app.use(

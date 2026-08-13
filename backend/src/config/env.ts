@@ -16,6 +16,8 @@ const envSchema = z.object({
   JWT_SECRET: z.string().min(32, "JWT_SECRET must be at least 32 characters"),
 
   JWT_EXPIRES_IN: z.string().default("1h"),
+
+  TRUST_PROXY_HOPS: z.coerce.number().int().min(0).default(0),
 });
 
 export function getEnv() {
