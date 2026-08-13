@@ -415,7 +415,7 @@ The take-home implementation persists the access token in client storage. A larg
 
 ## AI Tool Disclosure
 
-AI-assisted development tools were used for development support, debugging, architecture discussion, test planning, documentation, and UI refinement.
+AI-assisted development tools(ChatGPT, Codex) were used for development support, debugging, architecture discussion, test planning, documentation, and UI refinement.
 
 Suggested code and decisions were reviewed, adapted, and verified manually. The final implementation was checked using automated tests, linting, TypeScript checks, production builds, and manual functional testing.
 
