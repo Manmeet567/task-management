@@ -7,8 +7,8 @@ async function startServer(): Promise<void> {
     const env = getEnv();
     await connectDatabase(env.MONGODB_URI);
 
-    app.listen(env.PORT, () => {
-      console.log(`[Server] running on port ${env.PORT}`);
+    app.listen(env.PORT, "0.0.0.0", () => {
+      console.log(`Server running on port ${env.PORT}`);
     });
   } catch (error) {
     console.error("[Failed] to start server:", error);
